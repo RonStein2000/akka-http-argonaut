@@ -12,27 +12,32 @@ import argonaut._
 
 import scalaz.{-\/, \/-}
 
-
 object ArgonautSupport {
 
-  implicit def argonautFromEntityUnmarshaller[T](decoder: DecodeJson[T])(implicit mat: ActorMaterializer): FromEntityUnmarshaller[T] =
-    argonautJsonFromEntityUnmarshaller map {
+  implicit def decoderToEntityUnmarshaller[T](decoder: DecodeJson[T])(implicit ec: ExecutionContext, mat: ActorMaterializer): FromEntityUnmarshaller[T] =
+    fromGenericEntitityUnmashaller(decoder, ec, mat)
+
+  implicit def fromGenericEntitityUnmashaller[T](implicit decoder: DecodeJson[T], ec: ExecutionContext, mat: ActorMaterializer): FromEntityUnmarshaller[T] =
+    fromJsonEntityUnmarshaller map {
       decoder.decodeJson(_).result match {
         case -\/( (err, _) ) => throw new IllegalArgumentException(err)
         case \/-(value) => value
       }
     }
 
-  implicit def argonautJsonFromEntityUnmarshaller(implicit ec: ExecutionContext, mat: ActorMaterializer): FromEntityUnmarshaller[Json] =
+  implicit def fromJsonEntityUnmarshaller(implicit ec: ExecutionContext, mat: ActorMaterializer): FromEntityUnmarshaller[Json] =
     Unmarshaller.byteStringUnmarshaller.forContentTypes(MediaTypes.`application/json`) mapWithCharset { (data, charset) =>
       data.decodeString(charset.nioCharset.name())
     } map { dataString =>
       dataString.parseWith(identity, err => throw new IllegalArgumentException(err))
     }
 
-  implicit def argonautToEntityMarshaller[T](encoder: EncodeJson[T])(implicit ec: ExecutionContext, mat: ActorMaterializer): ToEntityMarshaller[T] =
-    argonautJsonToEntityMarshaller compose (encoder.encode(_))
+  implicit def encoderToEntityMarshaller[T](encoder: EncodeJson[T])(implicit ec: ExecutionContext, mat: ActorMaterializer): ToEntityMarshaller[T] =
+    toGenericEntityMarshaller(encoder, ec, mat)
+  
+  implicit def toGenericEntityMarshaller[T](implicit encoder: EncodeJson[T], ec: ExecutionContext, mat: ActorMaterializer): ToEntityMarshaller[T] =
+    toJsonEntityMarshaller compose (encoder.encode(_))
 
-  implicit def argonautJsonToEntityMarshaller(implicit ec: ExecutionContext, mat: ActorMaterializer): ToEntityMarshaller[Json] =
+  implicit def toJsonEntityMarshaller(implicit ec: ExecutionContext, mat: ActorMaterializer): ToEntityMarshaller[Json] =
     Marshaller.stringMarshaller(MediaTypes.`application/json`) compose (_.nospaces)
 }

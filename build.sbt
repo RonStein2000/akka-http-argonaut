@@ -16,7 +16,7 @@ scalaVersion := "2.11.7"
 
 scalacOptions += "-deprecation"
 
-crossScalaVersions := Seq("2.10.6")
+crossScalaVersions := Seq("2.11.7", "2.10.6")
 
 libraryDependencies ++= Seq(
   "com.typesafe.akka" %% "akka-http-experimental" % "2.0.2",

@@ -1,6 +1,10 @@
 organization := "io.github.nivox"
 
+name := "akka-http-argonaut"
+
 version := "0.1-SNAPSHOT"
+
+licenses += ("MIT", url("http://opensource.org/licenses/MIT"))
 
 scalaVersion := "2.11.7"
 

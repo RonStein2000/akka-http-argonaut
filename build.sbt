@@ -2,7 +2,7 @@ organization := "io.github.nivox"
 
 name := "akka-http-argonaut"
 
-version := "0.1-SNAPSHOT"
+version := "0.1"
 
 licenses += ("MIT", url("http://opensource.org/licenses/MIT"))
 

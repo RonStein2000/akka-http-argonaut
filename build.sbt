@@ -2,6 +2,12 @@ organization := "io.github.nivox"
 
 name := "akka-http-argonaut"
 
+description := """Akka HTTP bindings to argonaut.io for Marshalling/Unmarshalling"""
+
+homepage := Some(url("https://github.com/nivox/akka-http-argonaut"))
+
+startYear := Some(2015)
+
 version := "0.1"
 
 licenses += ("MIT", url("http://opensource.org/licenses/MIT"))

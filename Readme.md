@@ -4,7 +4,7 @@ Akka-http-argonaut is a simple library providing akka-http bindings to [argonaut
 ## Add it to your project
 In order to add *akka-htt-argonaut* to your project simply include the following dependency:
 
-```"io.github.nivox" %% "akka-http-argonaut" % "0.1"```
+```"io.github.nivox" %% "akka-http-argonaut" % "0.2"```
 
 The library is built against the following scala versions:
 
